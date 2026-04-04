@@ -1,0 +1,11 @@
+{
+  "name": "nexscasa",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'No build step required' && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenet Thomas | Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%; width: 100%;
+            overflow: hidden;
+            background: #080808;
+        }
+
+        #site-frame {
+            width: 100%; height: 100%;
+            border: none; display: block;
+            opacity: 1;
+            transition: opacity 0.18s ease;
+        }
+
+        /* Transition overlay — covers the flash between page loads */
+        #nav-overlay {
+            position: fixed;
+            inset: 0;
+            background: #080808;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+            z-index: 99998;
+        }
+        #nav-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-overlay"></div>
+    <iframe id="site-frame" src="index.html"></iframe>
+
+    <!-- Audio engine + mini bar live here permanently — never reload -->
+    <script src="music-persistence.js"></script>
+
+    <script>
+        const frame   = document.getElementById('site-frame');
+        const overlay = document.getElementById('nav-overlay');
+        let   isNavigating = false;
+
+        // ── Smooth navigation: fade out → load → fade in ────────────────────
+        function navigateTo(url) {
+            if (isNavigating) return;
+            isNavigating = true;
+
+            // 1. Fade to black
+            overlay.classList.add('active');
+
+            setTimeout(() => {
+                // 2. Load new page
+                frame.src = url;
+                frame.addEventListener('load', () => {
+                    // 3. Fade back in
+                    overlay.classList.remove('active');
+                    isNavigating = false;
+                    attachInterceptor();
+                }, { once: true });
+            }, 160); // matches fade-out duration
+        }
+
+        // ── Intercept internal links inside the iframe ───────────────────────
+        function attachInterceptor() {
+            try {
+                const iDoc = frame.contentDocument || frame.contentWindow.document;
+
+                iDoc.addEventListener('click', (e) => {
+                    const link = e.target.closest('a');
+                    if (!link) return;
+                    const href = link.getAttribute('href');
+                    if (!href) return;
+
+                    // Let external links, mailto, anchors, and _blank open normally
+                    const isExternal = href.startsWith('http') || href.startsWith('//') || href.startsWith('mailto');
+                    const isAnchor   = href.startsWith('#');
+                    const isNewTab   = link.target === '_blank';
+                    if (isExternal || isAnchor || isNewTab) return;
+
+                    // Internal — smooth in-frame navigation
+                    e.preventDefault();
+                    navigateTo(link.href);
+                }, true);
+            } catch (err) { /* cross-origin guard */ }
+        }
+
+        // Attach on first load
+        frame.addEventListener('load', attachInterceptor);
+    </script>
+</body>
+</html>

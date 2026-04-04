@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Portal | Personal Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        .music-page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+            opacity: 0.8;
+        }
+
+        .music-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .track-card {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .track-card:hover {
+            border-color: var(--lustre);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .track-playing-ring {
+            width: 45px;
+            height: 45px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+
+        .music-playing .track-playing-ring {
+            animation: rotateDisk 4s linear infinite;
+            border-color: var(--lustre);
+            box-shadow: 0 0 15px var(--lustre);
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <canvas id="mobiusCanvas"></canvas>
+    <div id="cursor-glow"></div>
+
+    <a href="index.html" class="back-link">&larr; Back to Hub</a>
+
+    <div class="music-page-container">
+        <header class="music-header">
+            <h1 class="section-title">Music Collection</h1>
+            <p style="opacity: 0.6; letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem;">Classical & Ambient Soundscapes</p>
+        </header>
+
+        <!-- Main Persistent Player Area -->
+        <section id="music-track" class="glass-card" style="margin-bottom: 4rem; width: 100%; max-width: 800px; padding: 2.5rem; display: flex; align-items: center; gap: 2rem;">
+            <div class="music-player-container" id="music-play-btn" style="display: flex; align-items: center; gap: 1.5rem; cursor: pointer; width: 100%;">
+                <div class="music-disk-icon" id="music-disk" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; position: relative; transition: all 0.5s ease; flex-shrink: 0;">
+                    <div style="width: 14px; height: 14px; border-radius: 50%; background: var(--primary);"></div>
+                    <div class="disk-glow" style="position: absolute; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 20px rgba(184, 169, 154, 0.2);"></div>
+                </div>
+
+                <div class="visualizer-container" id="music-visualizer" style="display: flex; align-items: center; gap: 3px; height: 35px; margin: 0 1.5rem; opacity: 0.7;">
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+
+                <div class="track-info" style="flex-grow: 1;">
+                    <div style="display: flex; align-items: baseline; margin-bottom: 0.5rem;">
+                        <div style="display: flex; flex-direction: column;">
+                            <span class="track-name" style="font-size: 1.2rem; font-weight: 500; letter-spacing: 1px; color: var(--primary);">Parano (feat.DDB) slowed</span>
+                            <p class="play-status" id="play-status" style="margin: 0.1rem 0 0; font-size: 0.75rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px;">Click to Play</p>
+                        </div>
+                        <div class="time-display" style="margin-left: 2.5rem; font-size: 0.8rem; opacity: 0.6; font-family: 'Outfit', sans-serif; letter-spacing: 1px; white-space: nowrap;">
+                            <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+                        </div>
+                    </div>
+                    <div class="seek-bar-wrapper" style="width: 100%; height: 20px; display: flex; align-items: center;">
+                        <input type="range" id="music-seek" min="0" value="0" step="0.1" style="width: 100%;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Track List -->
+        <div class="music-grid">
+            <div class="track-card glass-card active-track" data-src="parano_slowed.mp3" data-name="Parano (feat.DDB) slowed">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">Parano (feat.DDB)</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">Frozy • Slowed + Reverb</p>
+                </div>
+            </div>
+            
+            <div class="track-card glass-card" data-src="pink_and_white.mp3" data-name="Pink + White">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">Pink + White</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">Frank Ocean</p>
+                </div>
+            </div>
+
+            <div class="track-card glass-card" data-src="softcore.mp3" data-name="Softcore">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">Softcore</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">The Neighbourhood</p>
+                </div>
+            </div>
+
+            <div class="track-card glass-card" data-src="sdp_interlude.mp3" data-name="sdp interlude">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">sdp interlude</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">Travis Scott</p>
+                </div>
+            </div>
+
+            <div class="track-card glass-card" data-src="hex.mp3" data-name="Hex">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">Hex</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">80purppp</p>
+                </div>
+            </div>
+
+            <div class="track-card glass-card" data-src="let_u_go.mp3" data-name="Let U Go">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">Let U Go</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">Central Cee</p>
+                </div>
+            </div>
+
+            <div class="track-card glass-card" data-src="watch.mp3" data-name="Watch">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">Watch</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">Billie Eilish</p>
+                </div>
+            </div>
+
+            <div class="track-card glass-card" data-src="my_eyes.mp3" data-name="My Eyes">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">My Eyes</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">Travis Scott</p>
+                </div>
+            </div>
+            
+            <div class="track-card glass-card" data-src="judas.mp3" data-name="Judas">
+                <div class="track-playing-ring">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></div>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--primary);">Judas</h3>
+                    <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.5;">Lady Gaga</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="spotify-promo-area" style="margin-top: 4rem; width: 100%; display: flex; justify-content: center;">
+            <a href="https://open.spotify.com/user/31jygpoveiu4xoismxuptyawi35a?si=nQwJ0tXxT-imXSDbL2IlZg" id="social-spotify" target="_blank" rel="noopener noreferrer" 
+               class="glass-card spotify-full-link" 
+               style="display: flex; align-items: center; gap: 1.2rem; padding: 1.5rem 3rem; text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                <span style="font-size: 0.9rem; opacity: 0.6; letter-spacing: 2px; text-transform: uppercase;">see more on</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M8 14.5c2.5-1 5.5-1 8 0"></path>
+                    <path d="M7 11.5c3.5-1.5 6.5-1.5 10 0"></path>
+                    <path d="M6 8.5c4-2 8-2 12 0"></path>
+                </svg>
+                <strong style="font-size: 1.1rem; color: var(--primary); letter-spacing: 1px;">Tenet (Spotify)</strong>
+            </a>
+        </div>
+    </div>
+
+    <script src="mobius.js"></script>
+    <script src="cursor.js"></script>
+    <script src="music-persistence.js"></script>
+    <script src="music.js"></script>
+</body>
+</html>

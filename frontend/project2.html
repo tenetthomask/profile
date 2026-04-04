@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama Cloud Chat | Project</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--lustre);
+            transform: translateX(-5px);
+        }
+
+        .project-detailed-hero {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .project-detailed-hero img {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 16px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 30px rgba(184, 169, 154, 0.2);
+        }
+
+        .project-details-card {
+            margin-bottom: 4rem;
+        }
+
+        .project-details-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+        }
+
+        .feature-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--glass-border-light);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .feature-list li::before {
+            content: '☁️';
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body class="project-snap-container">
+    <div class="theme-toggle" id="theme-toggle">
+        <button class="toggle-btn" aria-label="Toggle Dark/Light Mode">
+            <span id="theme-icon">🌙</span>
+        </button>
+    </div>
+
+    <a href="index.html" class="back-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Hub
+    </a>
+
+    <!-- Slide 1: Identity -->
+    <section class="project-slide">
+        <div class="container">
+            <header id="heroSection" style="min-height: auto; margin: 0; padding: 2rem 0;">
+                <div class="hero-main" style="display: flex; align-items: center; justify-content: center; gap: 4rem; margin-bottom: 1rem;">
+                    <div class="profile-pic-container" style="width: 260px; height: 260px; position: relative; flex-shrink: 0;">
+                        <img src="new_project_2.png" alt="Ollama Cloud Project Disk" class="profile-pic" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--primary); box-shadow: 0 0 50px rgba(184, 169, 154, 0.5); transition: transform 0.4s ease;">
+                    </div>
+                    <h1 class="tenet-container" style="font-size: 5.5rem; margin: 0;">
+                        <span class="letter" data-full="Ollama">O</span>
+                        <span class="letter" data-full="Cloud">C</span>
+                        <span class="letter" data-full="Chat">C</span>
+                    </h1>
+                </div>
+                <p class="tagline" style="margin-top: 1.5rem; text-align: center;">Private Low-Latency LLM Interface</p>
+            </header>
+        </div>
+    </section>
+
+    <!-- Slide 2: Overview & Technology -->
+    <section class="project-slide">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 2rem;">Project Overview</h2>
+            <div class="glass-card project-details-card translucent-project-card">
+                <p class="writing-reveal"
+                    style="font-size: 1.4rem; line-height: 1.6; color: var(--text-dark); margin-top: 1rem;">
+                    A highly optimized, custom-styled chat interface designed specifically for engaging with locally
+                    hosted Ollama models. It bridges the gap between privacy-first local AI execution and premium
+                    cloud-tier user experience.
+                </p>
+
+                <h3 style="margin-top: 3rem;">Key Capabilities</h3>
+                <ul class="feature-list">
+                    <li><strong>Local First:</strong> Connects securely to backend private Ollama instances without data
+                        leaks.</li>
+                    <li><strong>Stream Response:</strong> Real-time token streaming for a native, fast-paced
+                        conversational feel.</li>
+                    <li><strong>Model Switching:</strong> Seamlessly swap between parameters-heavy and lightweight
+                        models mid-conversation.</li>
+                </ul>
+
+                <hr style="margin: 3rem 0; border: none; border-top: 1px solid var(--glass-border-light);">
+
+                <div id="tech-stack">
+                    <h2 class="section-title" style="margin-bottom: 1.5rem; border-bottom: none;">Core Technology</h2>
+                    <div class="tag-cloud">
+                        <span class="pill-tag">Ollama API</span>
+                        <span class="pill-tag">JavaScript Native</span>
+                        <span class="pill-tag">Vanilla CSS</span>
+                        <span class="pill-tag">Python Wrapper</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="mobius.js"></script>
+    <script src="cursor.js"></script>
+    <script src="music-persistence.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

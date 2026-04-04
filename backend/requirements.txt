@@ -1,0 +1,4 @@
+no-builtin-dependencies
+# This project uses standard Web APIs and requires no Python external libraries for basic serving.
+# However, for advanced voice automation or local hosting, Python 3.10+ is recommended.
+# Use: python -m http.server 8000

@@ -20,15 +20,15 @@
     // ══════════════════════════════════════════════════════════════════════════
 
     const PLAYLIST = [
-        { name: 'Parano (feat.DDB) slowed', artist: 'Frozy',                             src: 'frontend/parano_slowed.mp3'   },
-        { name: 'Pink + White',             artist: 'Frank Ocean',                       src: 'frontend/pink_and_white.mp3'  },
-        { name: 'Softcore',                 artist: 'The Neighbourhood',                 src: 'frontend/softcore.mp3'        },
-        { name: 'sdp interlude',            artist: 'Travis Scott',                      src: 'frontend/sdp_interlude.mp3'   },
-        { name: 'Hex',                      artist: '80purppp',                          src: 'frontend/hex.mp3'             },
-        { name: 'Let U Go',                 artist: 'Central Cee',                       src: 'frontend/let_u_go.mp3'        },
-        { name: 'Watch',                     artist: 'Billie Eilish',                      src: 'frontend/watch.mp3'           },
-        { name: 'My Eyes',                  artist: 'Travis Scott',                      src: 'frontend/my_eyes.mp3'         },
-        { name: 'Judas',                    artist: 'Lady Gaga',                         src: 'frontend/judas.mp3'           },
+        { name: 'Parano (feat.DDB) slowed', artist: 'Frozy',                             src: 'parano_slowed.mp3'   },
+        { name: 'Pink + White',             artist: 'Frank Ocean',                       src: 'pink_and_white.mp3'  },
+        { name: 'Softcore',                 artist: 'The Neighbourhood',                 src: 'softcore.mp3'        },
+        { name: 'sdp interlude',            artist: 'Travis Scott',                      src: 'sdp_interlude.mp3'   },
+        { name: 'Hex',                      artist: '80purppp',                          src: 'hex.mp3'             },
+        { name: 'Let U Go',                 artist: 'Central Cee',                       src: 'let_u_go.mp3'        },
+        { name: 'Watch',                     artist: 'Billie Eilish',                      src: 'watch.mp3'           },
+        { name: 'My Eyes',                  artist: 'Travis Scott',                      src: 'my_eyes.mp3'         },
+        { name: 'Judas',                    artist: 'Lady Gaga',                         src: 'judas.mp3'           },
     ];
 
     // ── Restore Saved State ───────────────────────────────────────────────────

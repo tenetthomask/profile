@@ -149,6 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (command.includes('github')) {
             document.getElementById('social-github')?.click();
             voiceOutput.textContent = '🐙 Opening GitHub';
+        } else if (command.includes('spotify')) {
+            document.getElementById('social-spotify')?.click();
+            voiceOutput.textContent = '🎵 Opening Spotify';
         } else if (command.includes('social')) {
             document.getElementById('socials')?.scrollIntoView({ behavior: 'smooth' });
             voiceOutput.textContent = '🔗 Moving to socials';
